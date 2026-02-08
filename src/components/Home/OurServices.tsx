@@ -1,10 +1,35 @@
 "use client"
 
 import { motion, useScroll, useTransform } from "motion/react"
-import { useRef, useMemo } from "react"
+import { useRef, useMemo, useEffect, useState } from "react"
 
 export default function ScrollHorizontal() {
     const containerRef = useRef(null)
+    const [dimensions, setDimensions] = useState({
+        itemWidth: 400,
+        gap: 30
+    })
+
+    // Update dimensions based on screen size
+    useEffect(() => {
+        const updateDimensions = () => {
+            if (window.innerWidth < 640) {
+                // Mobile
+                setDimensions({ itemWidth: 280, gap: 15 })
+            } else if (window.innerWidth < 1024) {
+                // Tablet
+                setDimensions({ itemWidth: 340, gap: 20 })
+            } else {
+                // Desktop
+                setDimensions({ itemWidth: 400, gap: 30 })
+            }
+        }
+
+        updateDimensions()
+        window.addEventListener('resize', updateDimensions)
+        return () => window.removeEventListener('resize', updateDimensions)
+    }, [])
+
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end end"],
@@ -12,23 +37,21 @@ export default function ScrollHorizontal() {
 
     // Calculate the correct horizontal scroll distance
     const totalDistance = useMemo(() => {
-        // We need to move from first item centered to last item centered
-        // Subtract one item width because we start with first item centered
-        return (items.length - 1) * (ITEM_WIDTH + GAP)
-    }, [])
+        return (items.length - 1) * (dimensions.itemWidth + dimensions.gap)
+    }, [dimensions])
 
     const x = useTransform(scrollYProgress, [0, 1], [0, -totalDistance])
 
     return (
         <div id="example">
-            <section className="intro-section ">
+            <section className="intro-section">
                 <div className="intro-content">
                     <h1 className="impact">Our Services</h1>
                     <p className="subtitle">
                         Your complete real estate solution partner
                     </p>
                     <div className="services-tagline">
-                        Buy • Sell • Rent • Renovate • Design
+                        <span className="tagline-text">Buy • Sell • Rent • Renovate • Design</span>
                     </div>
                 </div>
             </section>
@@ -61,7 +84,7 @@ export default function ScrollHorizontal() {
                 </div>
             </div>
 
-            <section className="outro-sectionc bg-[#1a1a2e]">
+            <section className="outro-section bg-[#1a1a2e]">
                 <div className="outro-content">
                     <h2 className="outro-title">Ready to Begin Your Journey?</h2>
                     <p className="outro-description">
@@ -73,7 +96,7 @@ export default function ScrollHorizontal() {
                 </div>
             </section>
 
-            <StyleSheet />
+            <StyleSheet dimensions={dimensions} />
         </div>
     )
 }
@@ -82,24 +105,31 @@ export default function ScrollHorizontal() {
  * ==============   Styles   ================
  */
 
-function StyleSheet() {
+function StyleSheet({ dimensions }: { dimensions: { itemWidth: number; gap: number } }) {
     return (
         <style>{`
+            * {
+                box-sizing: border-box;
+            }
+
             body {
                 overflow-x: hidden;
                 background: #1a1a2e;
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                margin: 0;
+                padding: 0;
             }
 
             #example {
                 height: auto;
                 overflow: visible;
+                width: 100%;
             }
 
             /* Intro Section Styles */
             .intro-section {
                 height: 60vh;
-                min-height: 500px;
+                min-height: 400px;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -122,16 +152,17 @@ function StyleSheet() {
             }
 
             .intro-content {
-                max-width: 800px;
+                max-width: 90%;
                 margin: 0 auto;
                 position: relative;
                 z-index: 2;
+                padding: 0 15px;
             }
 
             .impact {
-                font-size: clamp(42px, 8vw, 82px);
+                font-size: clamp(32px, 8vw, 82px);
                 color: #ffffff;
-                margin: 0 0 20px 0;
+                margin: 0 0 15px 0;
                 text-transform: uppercase;
                 font-weight: 800;
                 letter-spacing: -1px;
@@ -140,14 +171,15 @@ function StyleSheet() {
             }
 
             .subtitle {
-                font-size: clamp(18px, 3vw, 24px);
+                font-size: clamp(14px, 3vw, 24px);
                 color: rgba(255, 255, 255, 0.85);
-                margin-bottom: 30px;
+                margin-bottom: 20px;
                 line-height: 1.6;
                 font-weight: 300;
                 max-width: 600px;
                 margin-left: auto;
                 margin-right: auto;
+                padding: 0 10px;
             }
 
             .services-tagline {
@@ -155,23 +187,29 @@ function StyleSheet() {
                 justify-content: center;
                 align-items: center;
                 flex-wrap: wrap;
-                gap: 20px;
-                font-size: 18px;
+                gap: 15px;
+                font-size: clamp(14px, 2.5vw, 18px);
                 color: rgba(255, 255, 255, 0.7);
                 font-weight: 500;
+                padding: 0 10px;
+            }
+
+            .tagline-text {
+                display: inline-block;
             }
 
             .services-tagline::before,
             .services-tagline::after {
                 content: '✦';
                 color: #7c3aed;
-                font-size: 20px;
+                font-size: clamp(16px, 3vw, 20px);
             }
 
             .scroll-container {
-                height: 300vh; /* Reduced from potentially too large */
+                height: 300vh;
                 position: relative;
                 background: #1a1a2e;
+                width: 100%;
             }
 
             .sticky-wrapper {
@@ -182,31 +220,31 @@ function StyleSheet() {
                 margin: 0 auto;
                 display: flex;
                 align-items: center;
-                overflow: visible;
+                overflow: hidden;
             }
 
             .gallery-start-position {
                 position: absolute;
                 left: 50%;
                 transform: translateX(-50%);
-                width: ${ITEM_WIDTH}px;
+                width: ${dimensions.itemWidth}px;
                 height: 1px;
                 visibility: hidden;
             }
 
             .gallery {
                 display: flex;
-                gap: ${GAP}px;
+                gap: ${dimensions.gap}px;
                 will-change: transform;
                 position: absolute;
                 left: 50%;
-                transform: translateX(-${ITEM_WIDTH/2}px); /* Start with first item centered */
+                transform: translateX(-${dimensions.itemWidth/2}px);
             }
 
             .gallery-item {
                 flex-shrink: 0;
-                width: ${ITEM_WIDTH}px;
-                height: 500px;
+                width: ${dimensions.itemWidth}px;
+                height: clamp(350px, 60vh, 500px);
                 border-radius: 20px;
                 position: relative;
                 overflow: hidden;
@@ -234,32 +272,32 @@ function StyleSheet() {
 
             .item-content {
                 position: absolute;
-                bottom: 40px;
-                left: 40px;
-                right: 40px;
+                bottom: clamp(25px, 5vw, 40px);
+                left: clamp(25px, 5vw, 40px);
+                right: clamp(25px, 5vw, 40px);
                 z-index: 1;
             }
 
             .item-number {
-                font-size: 14px;
+                font-size: clamp(12px, 2vw, 14px);
                 color: var(--item-color);
                 font-family: "Azeret Mono", monospace;
                 display: block;
-                margin-bottom: 10px;
+                margin-bottom: 8px;
                 font-weight: 600;
                 letter-spacing: 1px;
             }
 
             .gallery-item h2 {
-                font-size: 32px;
+                font-size: clamp(24px, 5vw, 32px);
                 font-weight: 700;
                 color: #ffffff;
-                margin: 0 0 15px 0;
+                margin: 0 0 10px 0;
                 text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
             }
 
             .item-description {
-                font-size: 16px;
+                font-size: clamp(13px, 2.5vw, 16px);
                 color: rgba(255, 255, 255, 0.9);
                 line-height: 1.5;
                 margin: 0;
@@ -267,7 +305,7 @@ function StyleSheet() {
 
             .outro-section {
                 height: 70vh;
-                min-height: 500px;
+                min-height: 400px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -277,31 +315,35 @@ function StyleSheet() {
 
             .outro-content {
                 text-align: center;
-                max-width: 600px;
+                max-width: 90%;
                 margin: 0 auto;
+                padding: 0 15px;
             }
 
             .outro-title {
-                font-size: clamp(36px, 6vw, 56px);
+                font-size: clamp(28px, 6vw, 56px);
                 color: #ffffff;
-                margin-bottom: 24px;
+                margin-bottom: 20px;
                 font-weight: 700;
                 line-height: 1.2;
             }
 
             .outro-description {
-                font-size: clamp(16px, 2vw, 20px);
+                font-size: clamp(14px, 2.5vw, 20px);
                 color: rgba(255, 255, 255, 0.8);
                 line-height: 1.6;
-                margin-bottom: 40px;
+                margin-bottom: 30px;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
             }
 
             .outro-button {
                 background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
                 color: white;
                 border: none;
-                padding: 18px 48px;
-                font-size: 18px;
+                padding: clamp(14px, 3vw, 18px) clamp(32px, 8vw, 48px);
+                font-size: clamp(15px, 2.5vw, 18px);
                 font-weight: 600;
                 border-radius: 50px;
                 cursor: pointer;
@@ -318,97 +360,156 @@ function StyleSheet() {
                 box-shadow: 0 15px 40px rgba(124, 58, 237, 0.4);
             }
 
-            @media (max-width: 768px) {
+            .outro-button:active {
+                transform: translateY(-1px);
+            }
+
+            /* Mobile Specific (< 640px) */
+            @media (max-width: 639px) {
                 .intro-section {
                     height: 50vh;
-                    min-height: 400px;
-                    padding: 30px 20px;
+                    min-height: 350px;
+                    padding: 30px 15px;
                 }
 
-                .impact {
-                    font-size: 36px;
-                    margin-bottom: 15px;
-                }
-
-                .subtitle {
-                    font-size: 16px;
-                    margin-bottom: 20px;
-                }
-
-                .services-tagline {
-                    font-size: 14px;
-                    gap: 10px;
-                }
-
-                .gallery-start-position {
-                    width: 280px;
-                }
-
-                .gallery {
-                    gap: 15px;
-                    transform: translateX(-${280/2}px);
+                .scroll-container {
+                    height: 250vh;
                 }
 
                 .gallery-item {
-                    width: 280px;
-                    height: 400px;
                     border-radius: 16px;
-                }
-
-                .item-content {
-                    bottom: 25px;
-                    left: 25px;
-                    right: 25px;
-                }
-
-                .gallery-item h2 {
-                    font-size: 24px;
-                    margin-bottom: 10px;
-                }
-
-                .item-description {
-                    font-size: 14px;
                 }
 
                 .outro-section {
                     height: 60vh;
-                    min-height: 400px;
-                    padding: 40px 20px;
-                }
-
-                .outro-title {
-                    font-size: 28px;
-                }
-
-                .outro-description {
-                    font-size: 16px;
-                }
-
-                .outro-button {
-                    padding: 16px 36px;
-                    font-size: 16px;
+                    min-height: 350px;
+                    padding: 40px 15px;
                 }
             }
 
+            /* Tablet Specific (640px - 1023px) */
+            @media (min-width: 640px) and (max-width: 1023px) {
+                .intro-section {
+                    height: 55vh;
+                    min-height: 400px;
+                }
+
+                .scroll-container {
+                    height: 280vh;
+                }
+
+                .gallery-item {
+                    border-radius: 18px;
+                }
+            }
+
+            /* Desktop (>= 1024px) */
+            @media (min-width: 1024px) {
+                .intro-content {
+                    max-width: 800px;
+                }
+
+                .outro-content {
+                    max-width: 600px;
+                }
+            }
+
+            /* Large Desktop (>= 1440px) */
+            @media (min-width: 1440px) {
+                .gallery-item {
+                    height: 500px;
+                }
+            }
+
+            /* Extra Small Devices (< 375px) */
+            @media (max-width: 374px) {
+                .intro-section {
+                    padding: 25px 10px;
+                    min-height: 320px;
+                }
+
+                .impact {
+                    font-size: 28px;
+                    margin-bottom: 12px;
+                }
+
+                .subtitle {
+                    font-size: 13px;
+                    margin-bottom: 15px;
+                }
+
+                .services-tagline {
+                    font-size: 12px;
+                    gap: 10px;
+                }
+
+                .outro-section {
+                    padding: 30px 10px;
+                    min-height: 320px;
+                }
+            }
+
+            /* Landscape Mobile */
+            @media (max-height: 500px) and (orientation: landscape) {
+                .intro-section {
+                    height: 100vh;
+                    min-height: auto;
+                }
+
+                .outro-section {
+                    height: 100vh;
+                    min-height: auto;
+                }
+
+                .scroll-container {
+                    height: 200vh;
+                }
+            }
+
+            /* Reduced Motion */
             @media (prefers-reduced-motion: reduce) {
                 .gallery {
                     transform: none !important;
                 }
+                
                 .gallery-item:hover {
                     transform: none;
                 }
+                
                 .outro-button:hover {
                     transform: none;
                 }
+                
                 .scroll-container {
                     height: auto;
                 }
+                
                 .sticky-wrapper {
                     position: relative;
                     height: auto;
                     width: 100%;
                     overflow-x: auto;
                     padding: 50px 0;
+                    display: block;
+                }
+
+                .gallery {
+                    position: relative;
+                    left: auto;
+                    transform: none !important;
+                    padding: 0 20px;
+                }
+            }
+
+            /* Touch Device Optimizations */
+            @media (hover: none) and (pointer: coarse) {
+                .gallery-item:hover {
+                    transform: none;
+                }
+                
+                .outro-button:hover {
+                    transform: none;
+                    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
                 }
             }
         `}</style>
@@ -456,6 +557,3 @@ const items = [
         description: "Custom interior designs for every style"
     },
 ]
-
-const ITEM_WIDTH = 400
-const GAP = 30
