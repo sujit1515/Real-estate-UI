@@ -9,6 +9,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   
   const navLinks = [
+    { label: 'Home', href: '/' },
     { label: 'Buy', href: '/buy' },
     { label: 'Rent', href: '/rent' },
     { label: 'Sell', href: '/sell' },

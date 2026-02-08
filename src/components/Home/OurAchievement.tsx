@@ -71,14 +71,14 @@ function OurAchievement() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4">
+          {/* <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4">
             Ready to Find Your Dream Home?
           </h3>
           <p className="text-gray-300 mb-6 sm:mb-8 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-4">
             Join our community of satisfied clients and discover the perfect property for your needs
           </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+           */}
+          {/* <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <motion.button 
               className="group bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 shadow-xl hover:shadow-2xl relative overflow-hidden"
               whileHover={{ scale: 1.05 }}
@@ -96,9 +96,9 @@ function OurAchievement() {
               Schedule a Tour
             </motion.button>
           </div>
-          
+           */}
           {/* Trust indicators */}
-          <motion.div 
+          {/* <motion.div 
             className="mt-8 sm:mt-10 flex flex-wrap justify-center items-center gap-4 sm:gap-6 text-gray-400 text-xs sm:text-sm"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -119,7 +119,7 @@ function OurAchievement() {
               <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
               <span>No Hidden Fees</span>
             </div>
-          </motion.div>
+          </motion.div> */}
         </motion.div>
       </div>
       
