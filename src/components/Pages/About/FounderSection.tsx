@@ -33,7 +33,7 @@ export default function MeetOurFounder() {
             <div className="relative h-64 xs:h-72 sm:h-80 md:h-auto md:min-h-[400px] lg:min-h-[500px]">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-transparent"></div>
               <Image
-                src="/Images/founder.jpg"
+                src="/Images/Assets/tatu.jpeg"
                 alt="Founder"
                 fill
                 className="object-cover"
@@ -44,7 +44,7 @@ export default function MeetOurFounder() {
             {/* Founder Info */}
             <div className="p-6 xs:p-7 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-center">
               <h3 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2 sm:mb-3">
-                Rajesh Kuamar Behera
+                Suryakanta Das
               </h3>
               <p className="text-purple-400 text-base xs:text-lg sm:text-xl md:text-2xl font-medium mb-4 sm:mb-6">
                 Founder & CEO
