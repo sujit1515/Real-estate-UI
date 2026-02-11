@@ -2,8 +2,10 @@
 
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { X, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { X, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react"; // Added Loader2 for loading state
 import { motion } from "framer-motion";
+import { loginUser } from '@/app/api/auth';
+import { toast } from 'react-hot-toast'; // Added for notifications
 
 interface LoginPopupProps {
   isOpen: boolean;
@@ -24,20 +26,95 @@ export default function LoginPopup({
     password: "",
     rememberMe: false,
   });
-
+  const [isLoading, setIsLoading] = useState(false); 
+  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({}); 
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     });
+    // Clear error when user types
+    if (errors[name as keyof typeof errors]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }));
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login data:", formData);
-    // Add your login logic here
-    onClose();
+    
+    // Clear previous errors
+    setErrors({});
+    
+    // Basic validation
+    if (!formData.email.trim()) {
+      setErrors(prev => ({ ...prev, email: "Email is required" }));
+      return;
+    }
+    
+    if (!formData.password) {
+      setErrors(prev => ({ ...prev, password: "Password is required" }));
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await loginUser({
+        email: formData.email,
+        password: formData.password
+      });
+
+      // Handle successful login
+      console.log("Login successful:", response);
+      
+      // Show success message
+      toast.success("Login successful!");
+      
+      // Store token if remember me is checked
+      if (formData.rememberMe && response.token) {
+        localStorage.setItem('authToken', response.token);
+        // You might also want to store user data
+        localStorage.setItem('user', JSON.stringify(response.user));
+      } else if (response.token) {
+        // Store in session storage if not remember me
+        sessionStorage.setItem('authToken', response.token);
+        sessionStorage.setItem('user', JSON.stringify(response.user));
+      }
+      
+      // Close the popup
+      onClose();
+      
+      // You might want to redirect or update global auth state here
+      // window.location.reload(); // Or use a context/state management
+
+    } catch (error: any) {
+      console.error("Login error:", error);
+      
+      // Handle specific error messages from API
+      if (error.response?.data?.message) {
+        const message = error.response.data.message.toLowerCase();
+        
+        if (message.includes("email") || message.includes("user")) {
+          setErrors(prev => ({ ...prev, email: error.response.data.message }));
+        } else if (message.includes("password")) {
+          setErrors(prev => ({ ...prev, password: error.response.data.message }));
+        } else {
+          setErrors(prev => ({ ...prev, general: error.response.data.message }));
+        }
+        
+        toast.error(error.response.data.message);
+      } else if (error.message) {
+        setErrors(prev => ({ ...prev, general: error.message }));
+        toast.error(error.message);
+      } else {
+        setErrors(prev => ({ ...prev, general: "Login failed. Please try again." }));
+        toast.error("Login failed. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -72,6 +149,7 @@ export default function LoginPopup({
                 <button
                   onClick={onClose}
                   className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+                  disabled={isLoading} // Disable close while loading
                 >
                   <X size={24} />
                 </button>
@@ -86,6 +164,13 @@ export default function LoginPopup({
                 <p className="text-gray-400 text-center text-sm xs:text-base mb-6 xs:mb-8">
                   Sign in to your Kalinga Homes account
                 </p>
+
+                {/* General Error Message */}
+                {errors.general && (
+                  <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                    <p className="text-red-400 text-sm text-center">{errors.general}</p>
+                  </div>
+                )}
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-5">
@@ -105,10 +190,16 @@ export default function LoginPopup({
                         value={formData.email}
                         onChange={handleChange}
                         placeholder="Enter your email"
-                        className="w-full pl-11 pr-4 py-3 bg-[#1a1a2e] border border-purple-900/30 rounded-lg text-white placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition text-sm xs:text-base"
+                        className={`w-full pl-11 pr-4 py-3 bg-[#1a1a2e] border ${
+                          errors.email ? 'border-red-500' : 'border-purple-900/30'
+                        } rounded-lg text-white placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition text-sm xs:text-base`}
                         required
+                        disabled={isLoading}
                       />
                     </div>
+                    {errors.email && (
+                      <p className="mt-1 text-red-400 text-sm">{errors.email}</p>
+                    )}
                   </div>
 
                   {/* Password */}
@@ -127,17 +218,24 @@ export default function LoginPopup({
                         value={formData.password}
                         onChange={handleChange}
                         placeholder="Enter your password"
-                        className="w-full pl-11 pr-11 py-3 bg-[#1a1a2e] border border-purple-900/30 rounded-lg text-white placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition text-sm xs:text-base"
+                        className={`w-full pl-11 pr-11 py-3 bg-[#1a1a2e] border ${
+                          errors.password ? 'border-red-500' : 'border-purple-900/30'
+                        } rounded-lg text-white placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition text-sm xs:text-base`}
                         required
+                        disabled={isLoading}
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple-400 transition"
+                        disabled={isLoading}
                       >
                         {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                       </button>
                     </div>
+                    {errors.password && (
+                      <p className="mt-1 text-red-400 text-sm">{errors.password}</p>
+                    )}
                   </div>
 
                   {/* Remember Me & Forgot Password */}
@@ -149,6 +247,7 @@ export default function LoginPopup({
                         checked={formData.rememberMe}
                         onChange={handleChange}
                         className="w-4 h-4 rounded border-purple-900/30 bg-[#1a1a2e] text-purple-600 focus:ring-2 focus:ring-purple-500/20"
+                        disabled={isLoading}
                       />
                       <span className="text-gray-300">Remember me</span>
                     </label>
@@ -156,6 +255,7 @@ export default function LoginPopup({
                       type="button"
                       onClick={onSwitchToForgotPassword}
                       className="text-purple-400 hover:text-purple-300 transition cursor-pointer"
+                      disabled={isLoading}
                     >
                       Forgot Password?
                     </button>
@@ -164,9 +264,21 @@ export default function LoginPopup({
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    className="w-full bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white font-semibold py-3 rounded-lg transition-all shadow-lg hover:shadow-xl text-sm xs:text-base min-h-[44px] cursor-pointer"
+                    disabled={isLoading}
+                    className={`w-full ${
+                      isLoading 
+                        ? 'bg-purple-700 cursor-not-allowed' 
+                        : 'bg-purple-600 hover:bg-purple-700 active:bg-purple-800'
+                    } text-white font-semibold py-3 rounded-lg transition-all shadow-lg hover:shadow-xl text-sm xs:text-base min-h-[44px] flex items-center justify-center`}
                   >
-                    Sign In
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="animate-spin mr-2" size={20} />
+                        Signing In...
+                      </>
+                    ) : (
+                      "Sign In"
+                    )}
                   </button>
                 </form>
 
@@ -212,14 +324,13 @@ export default function LoginPopup({
                     Facebook
                   </button>
                 </div>
-
                 {/* Sign Up Link */}
                 <p className="text-center text-gray-400 text-sm mt-6">
                   Dont have an account?{" "}
                   <button
                     onClick={onSwitchToSignup}
-                    className="text-purple-400 hover:text-purple-300 font-medium transition cursor-pointer
-"
+                    className="text-purple-400 hover:text-purple-300 font-medium transition cursor-pointer"
+                    disabled={isLoading}
                   >
                     Sign Up
                   </button>
