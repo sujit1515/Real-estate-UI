@@ -33,7 +33,7 @@ export default function MeetOurFounder() {
             <div className="relative h-64 xs:h-72 sm:h-80 md:h-auto md:min-h-[400px] lg:min-h-[500px]">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-transparent"></div>
               <Image
-                src="/Images/Assets/tatu.jpeg"
+                src=""
                 alt="Founder"
                 fill
                 className="object-cover"

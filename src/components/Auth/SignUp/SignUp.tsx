@@ -1,24 +1,27 @@
-
 "use client";
 
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { X, Mail, Lock, User,Eye, EyeOff } from "lucide-react";
-import {registerUser} from '@/app/api/auth'
+import { X, Mail, Lock, User, Eye, EyeOff, Loader2 } from "lucide-react";
+import { signup } from "@/api/auth";
+import { toast } from 'react-hot-toast';
 
 interface SignUpPopupProps {
   isOpen: boolean;
   onClose: () => void;
   onSwitchToLogin: () => void;
+  onSignupSuccess?: () => void; // Add this prop
 }
 
 export default function SignUpPopup({
   isOpen,
   onClose,
   onSwitchToLogin,
+  onSignupSuccess, // Add this
 }: SignUpPopupProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -37,40 +40,59 @@ export default function SignUpPopup({
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (formData.password !== formData.confirmPassword) {
-    alert("Passwords don't match!");
-    return;
-  }
-
-  try {
-    const payload = {
-      name: formData.fullName,
-      email: formData.email,
-      password: formData.password,
-      phone: formData.phone,
-    };
-
-    const res = await registerUser(payload);   
-
-    alert(res.message || "Signup successful");
-
-    if (res.success) {
-      onClose();      
-      onSwitchToLogin();  
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords don't match!");
+      return;
     }
 
-  } catch (error: any) {
-    alert(error?.response?.data?.message || "Signup failed");
-  }
-};
+    if (!formData.agreeToTerms) {
+      toast.error("Please agree to the Terms & Conditions");
+      return;
+    }
 
+    setIsLoading(true);
+
+    try {
+      const payload = {
+        name: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+        phone: formData.phone,
+      };
+
+      const response = await signup(payload);
+      
+      console.log("Signup successful:", response);
+      toast.success(response.message || "Signup successful!");
+
+      // Store token and user data if returned
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('userData', JSON.stringify(response.user));
+      }
+
+      // Call the success callback to dispatch auth change event
+      if (onSignupSuccess) {
+        onSignupSuccess();
+      }
+
+      onClose();
+      onSwitchToLogin();
+
+    } catch (error: any) {
+      console.error("Signup error:", error);
+      const errorMessage = error?.response?.data?.message || "Signup failed. Please try again.";
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
-        {/* Backdrop */}
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -95,15 +117,14 @@ export default function SignUpPopup({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[#252544] p-6 xs:p-8 sm:p-10 shadow-2xl transition-all border border-purple-900/30">
-                {/* Close Button */}
                 <button
                   onClick={onClose}
                   className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+                  disabled={isLoading}
                 >
                   <X size={24} />
                 </button>
 
-                {/* Header */}
                 <Dialog.Title
                   as="h3"
                   className="text-2xl xs:text-3xl sm:text-4xl font-bold text-white text-center mb-2"
@@ -114,9 +135,7 @@ export default function SignUpPopup({
                   Join Kalinga Homes today
                 </p>
 
-                {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* Full Name */}
                   <div>
                     <label className="block text-gray-300 text-sm font-medium mb-2">
                       Full Name
@@ -134,11 +153,11 @@ export default function SignUpPopup({
                         placeholder="Enter your full name"
                         className="w-full pl-11 pr-4 py-3 bg-[#1a1a2e] border border-purple-900/30 rounded-lg text-white placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition text-sm xs:text-base"
                         required
+                        disabled={isLoading}
                       />
                     </div>
                   </div>
 
-                  {/* Email */}
                   <div>
                     <label className="block text-gray-300 text-sm font-medium mb-2">
                       Email Address
@@ -156,33 +175,28 @@ export default function SignUpPopup({
                         placeholder="Enter your email"
                         className="w-full pl-11 pr-4 py-3 bg-[#1a1a2e] border border-purple-900/30 rounded-lg text-white placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition text-sm xs:text-base"
                         required
+                        disabled={isLoading}
                       />
                     </div>
                   </div>
 
-                  {/* Phone */}
-                  {/* <div>
+                  <div>
                     <label className="block text-gray-300 text-sm font-medium mb-2">
-                      Phone Number
+                      Phone Number (Optional)
                     </label>
                     <div className="relative">
-                      <Phone
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                        size={20}
-                      />
                       <input
                         type="tel"
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
                         placeholder="Enter your phone number"
-                        className="w-full pl-11 pr-4 py-3 bg-[#1a1a2e] border border-purple-900/30 rounded-lg text-white placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition text-sm xs:text-base"
-                        required
+                        className="w-full pl-4 pr-4 py-3 bg-[#1a1a2e] border border-purple-900/30 rounded-lg text-white placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition text-sm xs:text-base"
+                        disabled={isLoading}
                       />
                     </div>
-                  </div> */}
+                  </div>
 
-                  {/* Password */}
                   <div>
                     <label className="block text-gray-300 text-sm font-medium mb-2">
                       Password
@@ -200,18 +214,19 @@ export default function SignUpPopup({
                         placeholder="Create a password"
                         className="w-full pl-11 pr-11 py-3 bg-[#1a1a2e] border border-purple-900/30 rounded-lg text-white placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition text-sm xs:text-base"
                         required
+                        disabled={isLoading}
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple-400 transition"
+                        disabled={isLoading}
                       >
                         {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                       </button>
                     </div>
                   </div>
 
-                  {/* Confirm Password */}
                   <div>
                     <label className="block text-gray-300 text-sm font-medium mb-2">
                       Confirm Password
@@ -229,22 +244,19 @@ export default function SignUpPopup({
                         placeholder="Confirm your password"
                         className="w-full pl-11 pr-11 py-3 bg-[#1a1a2e] border border-purple-900/30 rounded-lg text-white placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition text-sm xs:text-base"
                         required
+                        disabled={isLoading}
                       />
                       <button
                         type="button"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple-400 transition"
+                        disabled={isLoading}
                       >
-                        {showConfirmPassword ? (
-                          <EyeOff size={20} />
-                        ) : (
-                          <Eye size={20} />
-                        )}
+                        {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                       </button>
                     </div>
                   </div>
 
-                  {/* Terms & Conditions */}
                   <div className="flex items-start gap-2">
                     <input
                       type="checkbox"
@@ -253,6 +265,7 @@ export default function SignUpPopup({
                       onChange={handleChange}
                       className="w-4 h-4 mt-1 rounded border-purple-900/30 bg-[#1a1a2e] text-purple-600 focus:ring-2 focus:ring-purple-500/20"
                       required
+                      disabled={isLoading}
                     />
                     <label className="text-gray-300 text-sm">
                       I agree to the{" "}
@@ -266,16 +279,26 @@ export default function SignUpPopup({
                     </label>
                   </div>
 
-                  {/* Submit Button */}
                   <button
                     type="submit"
-                    className="w-full bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white font-semibold py-3 rounded-lg transition-all shadow-lg hover:shadow-xl text-sm xs:text-base min-h-[44px] mt-2 cursor-pointer"
+                    disabled={isLoading}
+                    className={`w-full ${
+                      isLoading 
+                        ? 'bg-purple-700 cursor-not-allowed' 
+                        : 'bg-purple-600 hover:bg-purple-700 active:bg-purple-800'
+                    } text-white font-semibold py-3 rounded-lg transition-all shadow-lg hover:shadow-xl text-sm xs:text-base min-h-[44px] flex items-center justify-center mt-2`}
                   >
-                    Create Account
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="animate-spin mr-2" size={20} />
+                        Creating Account...
+                      </>
+                    ) : (
+                      "Create Account"
+                    )}
                   </button>
                 </form>
 
-                {/* Divider */}
                 <div className="relative my-6">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-purple-900/30"></div>
@@ -287,7 +310,6 @@ export default function SignUpPopup({
                   </div>
                 </div>
 
-                {/* Social Sign Up */}
                 <div className="grid grid-cols-2 gap-3">
                   <button className="flex items-center justify-center gap-2 bg-[#1a1a2e] hover:bg-[#252544] border border-purple-900/30 text-white py-3 rounded-lg transition text-sm">
                     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -318,13 +340,12 @@ export default function SignUpPopup({
                   </button>
                 </div>
 
-                {/* Sign In Link */}
                 <p className="text-center text-gray-400 text-sm mt-6">
                   Already have an account?{" "}
                   <button
                     onClick={onSwitchToLogin}
-                    className="text-purple-400 hover:text-purple-300 font-medium transition cursor-pointer
-"
+                    className="text-purple-400 hover:text-purple-300 font-medium transition cursor-pointer"
+                    disabled={isLoading}
                   >
                     Sign In
                   </button>

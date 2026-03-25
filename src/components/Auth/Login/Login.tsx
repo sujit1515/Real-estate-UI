@@ -2,16 +2,17 @@
 
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { X, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react"; // Added Loader2 for loading state
+import { X, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { loginUser } from '@/app/api/auth';
-import { toast } from 'react-hot-toast'; // Added for notifications
+import { login } from "@/api/auth";
+import { toast } from 'react-hot-toast';
 
 interface LoginPopupProps {
   isOpen: boolean;
   onClose: () => void;
   onSwitchToSignup: () => void;
   onSwitchToForgotPassword: () => void;
+  onLoginSuccess?: () => void; // Add this prop
 }
 
 export default function LoginPopup({
@@ -19,6 +20,7 @@ export default function LoginPopup({
   onClose,
   onSwitchToSignup,
   onSwitchToForgotPassword,
+  onLoginSuccess, // Add this
 }: LoginPopupProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -26,16 +28,15 @@ export default function LoginPopup({
     password: "",
     rememberMe: false,
   });
-  const [isLoading, setIsLoading] = useState(false); 
-  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({}); 
-  
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     });
-    // Clear error when user types
     if (errors[name as keyof typeof errors]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
     }
@@ -44,10 +45,8 @@ export default function LoginPopup({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Clear previous errors
     setErrors({});
     
-    // Basic validation
     if (!formData.email.trim()) {
       setErrors(prev => ({ ...prev, email: "Email is required" }));
       return;
@@ -61,38 +60,40 @@ export default function LoginPopup({
     setIsLoading(true);
 
     try {
-      const response = await loginUser({
+      const response = await login({
         email: formData.email,
         password: formData.password
       });
 
-      // Handle successful login
       console.log("Login successful:", response);
       
-      // Show success message
       toast.success("Login successful!");
       
-      // Store token if remember me is checked
-      if (formData.rememberMe && response.token) {
-        localStorage.setItem('authToken', response.token);
-        // You might also want to store user data
-        localStorage.setItem('user', JSON.stringify(response.user));
-      } else if (response.token) {
-        // Store in session storage if not remember me
-        sessionStorage.setItem('authToken', response.token);
-        sessionStorage.setItem('user', JSON.stringify(response.user));
+      // Store token and user data
+      if (response.token) {
+        if (formData.rememberMe) {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('userData', JSON.stringify(response.user));
+        } else {
+          sessionStorage.setItem('token', response.token);
+          sessionStorage.setItem('userData', JSON.stringify(response.user));
+        }
+      }
+      
+      // Call the success callback to dispatch auth change event
+      if (onLoginSuccess) {
+        onLoginSuccess();
       }
       
       // Close the popup
       onClose();
       
-      // You might want to redirect or update global auth state here
-      // window.location.reload(); // Or use a context/state management
+      // Optional: redirect or reload
+      // window.location.reload();
 
     } catch (error: any) {
       console.error("Login error:", error);
       
-      // Handle specific error messages from API
       if (error.response?.data?.message) {
         const message = error.response.data.message.toLowerCase();
         
@@ -120,7 +121,6 @@ export default function LoginPopup({
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
-        {/* Backdrop */}
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -145,16 +145,14 @@ export default function LoginPopup({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[#252544] p-6 xs:p-8 sm:p-10 shadow-2xl transition-all border border-purple-900/30">
-                {/* Close Button */}
                 <button
                   onClick={onClose}
                   className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-                  disabled={isLoading} // Disable close while loading
+                  disabled={isLoading}
                 >
                   <X size={24} />
                 </button>
 
-                {/* Header */}
                 <Dialog.Title
                   as="h3"
                   className="text-2xl xs:text-3xl sm:text-4xl font-bold text-white text-center mb-2"
@@ -165,16 +163,13 @@ export default function LoginPopup({
                   Sign in to your Kalinga Homes account
                 </p>
 
-                {/* General Error Message */}
                 {errors.general && (
                   <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
                     <p className="text-red-400 text-sm text-center">{errors.general}</p>
                   </div>
                 )}
 
-                {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-5">
-                  {/* Email */}
                   <div>
                     <label className="block text-gray-300 text-sm font-medium mb-2">
                       Email Address
@@ -202,7 +197,6 @@ export default function LoginPopup({
                     )}
                   </div>
 
-                  {/* Password */}
                   <div>
                     <label className="block text-gray-300 text-sm font-medium mb-2">
                       Password
@@ -238,7 +232,6 @@ export default function LoginPopup({
                     )}
                   </div>
 
-                  {/* Remember Me & Forgot Password */}
                   <div className="flex items-center justify-between text-sm">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
@@ -261,7 +254,6 @@ export default function LoginPopup({
                     </button>
                   </div>
 
-                  {/* Submit Button */}
                   <button
                     type="submit"
                     disabled={isLoading}
@@ -282,7 +274,6 @@ export default function LoginPopup({
                   </button>
                 </form>
 
-                {/* Divider */}
                 <div className="relative my-6">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-purple-900/30"></div>
@@ -294,7 +285,6 @@ export default function LoginPopup({
                   </div>
                 </div>
 
-                {/* Social Login */}
                 <div className="grid grid-cols-2 gap-3">
                   <button className="flex items-center justify-center gap-2 bg-[#1a1a2e] hover:bg-[#252544] border border-purple-900/30 text-white py-3 rounded-lg transition text-sm">
                     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -324,9 +314,9 @@ export default function LoginPopup({
                     Facebook
                   </button>
                 </div>
-                {/* Sign Up Link */}
+                
                 <p className="text-center text-gray-400 text-sm mt-6">
-                  Dont have an account?{" "}
+                  Don't have an account?{" "}
                   <button
                     onClick={onSwitchToSignup}
                     className="text-purple-400 hover:text-purple-300 font-medium transition cursor-pointer"

@@ -4,8 +4,9 @@ import { useState } from "react";
 import Login from "../Login/Login";
 import SignUp from "../SignUp/SignUp";
 import ForgotPassword from "../ForgotPassword/ForgotPassword";
+import ResetPassword from "../ResetPassword/ResetPassword";
 
-type AuthView = "login" | "signup" | "forgot-password" | null;
+type AuthView = "login" | "signup" | "forgot-password" | "reset-password" | null;
 
 interface AuthManagerProps {
   initialView?: AuthView;
@@ -19,16 +20,46 @@ export default function AuthManager({
   onClose,
 }: AuthManagerProps) {
   const [currentView, setCurrentView] = useState<AuthView>(initialView);
+  const [resetEmail, setResetEmail] = useState("");
+
+  // Function to dispatch auth change event
+  const dispatchAuthChange = () => {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('authChange'));
+      console.log("Auth change event dispatched"); // For debugging
+    }
+  };
 
   const handleClose = () => {
     onClose();
-    // Reset to initial view after a short delay
-    setTimeout(() => setCurrentView(initialView), 300);
+    setTimeout(() => {
+      setCurrentView(initialView);
+      setResetEmail("");
+    }, 300);
+  };
+
+  const handleLoginSuccess = () => {
+    console.log("Login success, dispatching authChange event");
+    dispatchAuthChange();
+    handleClose();
+  };
+
+  const handleSignupSuccess = () => {
+    console.log("Signup success, dispatching authChange event");
+    dispatchAuthChange();
+    handleClose();
   };
 
   const switchToLogin = () => setCurrentView("login");
   const switchToSignup = () => setCurrentView("signup");
-  const switchToForgotPassword = () => setCurrentView("forgot-password");
+  const switchToForgotPassword = () => {
+    setResetEmail("");
+    setCurrentView("forgot-password");
+  };
+  const switchToResetPassword = (email: string) => {
+    setResetEmail(email);
+    setCurrentView("reset-password");
+  };
 
   return (
     <>
@@ -37,18 +68,28 @@ export default function AuthManager({
         onClose={handleClose}
         onSwitchToSignup={switchToSignup}
         onSwitchToForgotPassword={switchToForgotPassword}
+        onLoginSuccess={handleLoginSuccess}
       />
 
       <SignUp
         isOpen={isOpen && currentView === "signup"}
         onClose={handleClose}
         onSwitchToLogin={switchToLogin}
+        onSignupSuccess={handleSignupSuccess}
       />
 
       <ForgotPassword
         isOpen={isOpen && currentView === "forgot-password"}
         onClose={handleClose}
         onSwitchToLogin={switchToLogin}
+        onSwitchToResetPassword={switchToResetPassword}
+      />
+
+      <ResetPassword
+        isOpen={isOpen && currentView === "reset-password"}
+        onClose={handleClose}
+        onSwitchToLogin={switchToLogin}
+        email={resetEmail}
       />
     </>
   );
