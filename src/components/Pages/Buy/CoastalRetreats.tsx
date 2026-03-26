@@ -33,7 +33,7 @@ const PROPERTIES = [
 
 export default function CoastalRetreats() {
   return (
-    <section className="py-14 border-t border-[#2a2a3a]" id="coastal-retreats">
+    <section className="py-14 border-t border-purple-900/30 bg-[#1a1a2e]" id="coastal-retreats">
       <div className="max-w-[1200px] mx-auto px-6">
         <SectionHeader
           title="Coastal Retreats"
@@ -51,7 +51,7 @@ export default function CoastalRetreats() {
 
 function CoastalCard({ image, location, name, beds, amenity, price }) {
   return (
-    <div className="bg-[#1f1f2a] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-[#2a2a3a]">
+    <div className="bg-[#252544] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-purple-900/30 hover:border-purple-500/50">
       <div className="aspect-[16/10] overflow-hidden">
         <img src={image} alt={name} className="w-full h-full object-cover" />
       </div>
@@ -62,7 +62,7 @@ function CoastalCard({ image, location, name, beds, amenity, price }) {
         <h3 className="font-serif text-[20px] font-bold italic text-white mb-2.5">
           {name}
         </h3>
-        <div className="flex items-center gap-3 text-[11px] text-[#b0b0c0] font-medium">
+        <div className="flex items-center gap-3 text-[11px] text-gray-400 font-medium">
           <span className="flex items-center gap-1">
             <BedIcon /> {beds}
           </span>
@@ -72,9 +72,9 @@ function CoastalCard({ image, location, name, beds, amenity, price }) {
         </div>
         <div className="flex items-center justify-between mt-3">
           <p className="text-[18px] font-bold text-purple-400">
-            {price}<span className="text-[11px] font-normal text-[#a0a0b0]">/mo</span>
+            {price}<span className="text-[11px] font-normal text-gray-400">/mo</span>
           </p>
-          <button className="text-[11px] font-semibold text-white border border-[#2a2a3a] rounded-md px-4 py-1.5 hover:border-purple-500 hover:text-purple-400 transition-all">
+          <button className="text-[11px] font-semibold text-white border border-purple-900/30 rounded-lg px-4 py-1.5 hover:border-purple-500 hover:text-purple-400 transition-all duration-300 bg-[#252544]">
             Details
           </button>
         </div>

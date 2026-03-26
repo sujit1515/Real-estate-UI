@@ -12,14 +12,14 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="pb-14">
+    <section className="pb-14 bg-[#1a1a2e]">
       <div className="max-w-[1200px] mx-auto px-6">
-        <div className="bg-[#1f1f2a] rounded-xl px-8 md:px-12 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 border border-[#2a2a3a]">
+        <div className="bg-[#252544] rounded-2xl px-8 md:px-12 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 border border-purple-900/30 hover:border-purple-500/50 transition-all duration-300">
           <div>
             <h3 className="font-serif text-[24px] font-bold text-white mb-2">
               Curated Inbox
             </h3>
-            <p className="text-[13px] text-[#b0b0c0] max-w-xs leading-relaxed">
+            <p className="text-[13px] text-gray-400 max-w-xs leading-relaxed">
               Get exclusive access to off-market properties and new collection releases
               before they go public.
             </p>
@@ -37,7 +37,7 @@ export default function Newsletter() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email address"
                 required
-                className="bg-[#2a2a3a] border border-[#3a3a4a] rounded-lg px-4 py-2.5 text-[13px] text-white placeholder:text-[#a0a0b0] outline-none focus:border-purple-500 transition-colors w-full sm:w-[220px]"
+                className="bg-[#1f1f2a] border border-purple-900/30 rounded-lg px-4 py-2.5 text-[13px] text-white placeholder:text-gray-400 outline-none focus:border-purple-500 transition-colors w-full sm:w-[220px]"
               />
               <button
                 type="submit"

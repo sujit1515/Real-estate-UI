@@ -27,7 +27,7 @@ export default function ArchitecturalIcons() {
   }, []);
 
   return (
-    <section className="py-14 border-t border-[#2a2a3a]" id="architectural-icons">
+    <section className="py-14 border-t border-purple-900/30 bg-[#1a1a2e]" id="architectural-icons">
       <div className="max-w-[1200px] mx-auto px-6">
         <SectionHeader
           title="Architectural Icons"
@@ -37,9 +37,9 @@ export default function ArchitecturalIcons() {
 
         {/* 🔄 Loading */}
         {loading ? (
-          <p className="text-white">Loading properties...</p>
+          <p className="text-gray-300">Loading properties...</p>
         ) : properties.length === 0 ? (
-          <p className="text-white">No properties found</p>
+          <p className="text-gray-300">No properties found</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {properties.map((prop: any) => (
@@ -60,7 +60,7 @@ function ArchCard({
   isAvailable,
 }: any) {
   return (
-    <div className="bg-[#1f1f2a] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative border border-[#2a2a3a]">
+    <div className="bg-[#252544] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative border border-purple-900/30 hover:border-purple-500/50">
       
       {/* ✅ Availability Badge */}
       {isAvailable && (
@@ -79,7 +79,7 @@ function ArchCard({
       </div>
 
       <div className="p-4">
-        <p className="text-[10px] font-semibold uppercase text-[#a0a0b0] mb-1.5">
+        <p className="text-[10px] font-semibold uppercase text-gray-400 mb-1.5">
           {location}, {city}
         </p>
 
@@ -89,7 +89,7 @@ function ArchCard({
 
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-[9px] uppercase text-[#a0a0b0]">
+            <p className="text-[9px] uppercase text-gray-400">
               Price
             </p>
             <p className="text-[18px] font-bold text-purple-400">

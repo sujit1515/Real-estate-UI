@@ -20,7 +20,7 @@ const PROPERTIES = [
 
 export default function DesertSanctuaries() {
   return (
-    <section className="py-14 border-t border-[#2a2a3a]" id="desert-sanctuaries">
+    <section className="py-14 border-t border-purple-900/30 bg-[#1a1a2e]" id="desert-sanctuaries">
       <div className="max-w-[1200px] mx-auto px-6">
         <SectionHeader
           title="Desert Sanctuaries"
@@ -38,17 +38,21 @@ export default function DesertSanctuaries() {
 
 function DesertCard({ image, name, location, price }) {
   return (
-    <div className="bg-[#1f1f2a] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-[#2a2a3a]">
+    <div className="bg-[#252544] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-purple-900/30 hover:border-purple-500/50">
       <div className="aspect-video overflow-hidden">
-        <img src={image} alt={name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+        <img 
+          src={image} 
+          alt={name} 
+          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" 
+        />
       </div>
       <div className="px-4 py-4 flex items-center justify-between gap-3">
         <div>
           <h3 className="font-serif text-[19px] font-bold text-white">{name}</h3>
-          <p className="text-[11px] text-[#b0b0c0] mt-0.5">{location}</p>
+          <p className="text-[11px] text-gray-400 mt-0.5">{location}</p>
         </div>
         <p className="text-[18px] font-bold text-purple-400 shrink-0">
-          {price}<span className="text-[11px] font-normal text-[#a0a0b0]">/mo</span>
+          {price}<span className="text-[11px] font-normal text-gray-400">/mo</span>
         </p>
       </div>
     </div>

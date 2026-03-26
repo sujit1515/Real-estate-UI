@@ -8,10 +8,10 @@ export default function BookmarkButton() {
     <button
       onClick={() => setSaved(!saved)}
       aria-label={saved ? "Unsave" : "Save"}
-      className={`w-8 h-8 flex items-center justify-center rounded-md border transition-all
+      className={`w-8 h-8 flex items-center justify-center rounded-lg border transition-all duration-300
         ${saved
-          ? "border-purple-500 bg-purple-600 text-white"
-          : "border-[#2a2a3a] bg-[#1f1f2a] text-[#a0a0b0] hover:border-purple-500 hover:text-purple-400"
+          ? "border-purple-500 bg-purple-600 text-white hover:bg-purple-700"
+          : "border-purple-900/30 bg-[#252544] text-gray-400 hover:border-purple-500 hover:text-purple-400"
         }`}
     >
       <svg width="14" height="14" viewBox="0 0 24 24" fill={saved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">

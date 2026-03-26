@@ -27,7 +27,7 @@ const MINI_PROPS = [
 
 export default function UrbanLofts() {
   return (
-    <section className="py-14 border-t border-[#2a2a3a]" id="urban-lofts">
+    <section className="py-14 border-t border-purple-900/30 bg-[#1a1a2e]" id="urban-lofts">
       <div className="max-w-[1200px] mx-auto px-6">
         <SectionHeader
           title="Urban Lofts"
@@ -35,23 +35,23 @@ export default function UrbanLofts() {
         />
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 items-start">
           {/* Featured */}
-          <div className="relative rounded-xl overflow-hidden shadow-lg group">
+          <div className="relative rounded-2xl overflow-hidden shadow-lg group">
             <img
               src={FEATURED.image}
               alt={FEATURED.name}
               className="w-full aspect-[16/10] object-cover group-hover:scale-[1.02] transition-transform duration-500"
             />
             <div className="absolute bottom-0 left-0 right-0 px-6 pb-6 pt-16 bg-gradient-to-t from-black/80 to-transparent text-white">
-              <p className="text-[10px] font-semibold tracking-[0.15em] uppercase opacity-80 mb-1.5">
+              <p className="text-[10px] font-semibold tracking-[0.15em] uppercase text-gray-300 mb-1.5">
                 {FEATURED.city}
               </p>
               <h3 className="font-serif text-[26px] font-bold mb-3">{FEATURED.name}</h3>
               <div className="flex items-center gap-4">
                 <div>
-                  <p className="text-[10px] opacity-70 tracking-[0.1em] uppercase mb-0.5">Monthly</p>
-                  <p className="text-[22px] font-bold">{FEATURED.price}</p>
+                  <p className="text-[10px] text-gray-400 tracking-[0.1em] uppercase mb-0.5">Monthly</p>
+                  <p className="text-[22px] font-bold text-white">{FEATURED.price}</p>
                 </div>
-                <button className="bg-purple-600 text-white rounded-lg px-5 py-2.5 text-[13px] font-semibold hover:bg-purple-700 transition-colors">
+                <button className="bg-purple-600 text-white rounded-lg px-5 py-2.5 text-[13px] font-semibold hover:bg-purple-700 transition-colors duration-300">
                   Explore Residence
                 </button>
               </div>
@@ -72,7 +72,7 @@ export default function UrbanLofts() {
 
 function MiniCard({ image, location, name, price }) {
   return (
-    <div className="bg-[#1f1f2a] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow flex-1 border border-[#2a2a3a]">
+    <div className="bg-[#252544] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex-1 border border-purple-900/30 hover:border-purple-500/50 hover:-translate-y-1">
       <div className="h-[140px] overflow-hidden">
         <img src={image} alt={name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
       </div>
