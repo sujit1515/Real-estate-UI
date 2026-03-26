@@ -1,6 +1,6 @@
 
 import Hero from "@/components/Pages/Buy/Hero";
-import ArchitecturalIcons from "@/components/Pages/Buy/Architecturallcons";
+import Architecturallcons from "@/components/Pages/Buy/Architecturallcons";
 import CoastalRetreats from "@/components/Pages/Buy/CoastalRetreats";
 import UrbanLofts from "@/components/Pages/Buy/UrbanLofts";
 import DesertSanctuaries from "@/components/Pages/Buy/DesertSanctuaries";
@@ -19,7 +19,7 @@ export default function HomePage() {
       
       <main>
         <Hero />
-        <ArchitecturalIcons />
+        <Architecturallcons />
         <CoastalRetreats />
         <UrbanLofts />
         <DesertSanctuaries />

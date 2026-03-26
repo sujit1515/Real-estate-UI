@@ -38,7 +38,6 @@ export const addRoom = async (data: {
   return res.data;
 };
 
-
 // ➤ Get All Properties
 export const getRooms = async () => {
   const res = await API.get("/");
