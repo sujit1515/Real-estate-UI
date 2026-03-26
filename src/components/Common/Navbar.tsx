@@ -300,13 +300,13 @@ const Navbar = () => {
                 <div className="flex items-center">
                   <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center shadow-md">
                     <span className="text-white font-bold text-xs sm:text-sm">
-                      K
+                      L
                     </span>
                   </div>
                   <span className="ml-2 text-lg sm:text-xl">
-                    <span className="hidden xs:inline">Kalinga</span>
-                    <span className="xs:hidden">K</span>
-                    <span className="hidden sm:inline"> Homes</span>
+                    <span className="hidden xs:inline">Luminor</span>
+                    <span className="xs:hidden"></span>
+                    <span className="hidden sm:inline">Luminor </span>
                   </span>
                 </div>
               </Link>
