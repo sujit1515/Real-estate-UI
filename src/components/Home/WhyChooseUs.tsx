@@ -50,7 +50,7 @@ export default function WhyChooseUsDark() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4">
-            Why Choose <span className="text-purple-500">Kalinga Homes</span>?
+            Why Choose <span className="text-purple-500">Luminor</span>?
           </h2>
           <p className="text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl max-w-3xl mx-auto px-4">
             Your trusted partner in finding the perfect property with transparency, reliability, and excellence.

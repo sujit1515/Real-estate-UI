@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "motion/react"
 import { useRef, useMemo, useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 
 export default function ScrollHorizontal() {
     const containerRef = useRef(null)
@@ -9,6 +10,7 @@ export default function ScrollHorizontal() {
         itemWidth: 400,
         gap: 30
     })
+    const router = useRouter()
 
     // Update dimensions based on screen size
     useEffect(() => {
@@ -41,6 +43,10 @@ export default function ScrollHorizontal() {
     }, [dimensions])
 
     const x = useTransform(scrollYProgress, [0, 1], [0, -totalDistance])
+
+    const handleConsultationClick = () => {
+        router.push('/contact') // Adjust path to your contact page
+    }
 
     return (
         <div id="example">
@@ -90,7 +96,10 @@ export default function ScrollHorizontal() {
                     <p className="outro-description">
                         Contact us today for personalized assistance with all your real estate needs.
                     </p>
-                    <button className="outro-button">
+                    <button 
+                        className="outro-button"
+                        onClick={handleConsultationClick}
+                    >
                         Get Free Consultation
                     </button>
                 </div>

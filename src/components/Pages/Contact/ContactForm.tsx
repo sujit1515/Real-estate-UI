@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { createContact } from "@/api/contact"; // adjust import path as needed
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -16,17 +17,69 @@ export default function ContactForm() {
     description: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add your form submission logic here
+    setLoading(true);
+    setMessage(null);
+
+    // Map form fields to API payload
+    const payload = {
+      fullName: formData.fullName,
+      email: formData.email,
+      phone: formData.phone,
+      whatsapp: formData.whatsapp || undefined,
+      lookingFor: formData.lookingTo
+        ? (formData.lookingTo.charAt(0).toUpperCase() + formData.lookingTo.slice(1)) as "Buy" | "Rent" | "Sell"
+        : undefined,
+      propertyType: formData.propertyType
+        ? (formData.propertyType.charAt(0).toUpperCase() + formData.propertyType.slice(1)) as "Apartment" | "House" | "Villa" | "Commercial"
+        : undefined,
+      bestTimeToContact: formData.bestTime || undefined,
+      preferredContactMethod: formData.contactMethod
+        ? (() => {
+            switch (formData.contactMethod) {
+              case "phone": return "Phone";
+              case "whatsapp": return "WhatsApp";
+              case "email": return "Email";
+              default: return undefined;
+            }
+          })()
+        : undefined,
+      message: formData.description || undefined,
+    };
+
+    try {
+      const result = await createContact(payload);
+      setMessage({ type: "success", text: result.message || "Form submitted successfully!" });
+      // Optionally reset form
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        whatsapp: "",
+        lookingTo: "",
+        propertyType: "",
+        bestTime: "",
+        contactMethod: "",
+        description: "",
+      });
+    } catch (error: any) {
+      setMessage({ type: "error", text: error.message || "Submission failed. Please try again." });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -55,6 +108,18 @@ export default function ContactForm() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
+          {message && (
+            <div
+              className={`mb-6 p-4 rounded-lg ${
+                message.type === "success"
+                  ? "bg-green-500/20 border border-green-500 text-green-300"
+                  : "bg-red-500/20 border border-red-500 text-red-300"
+              }`}
+            >
+              {message.text}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
             {/* Row 1: Full Name & Email */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
@@ -212,9 +277,10 @@ export default function ContactForm() {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white font-semibold py-3 xs:py-3.5 sm:py-4 rounded-lg transition-all shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] text-sm xs:text-base sm:text-lg min-h-[44px]"
+              disabled={loading}
+              className="w-full bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white font-semibold py-3 xs:py-3.5 sm:py-4 rounded-lg transition-all shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] text-sm xs:text-base sm:text-lg min-h-[44px] disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              Send Message
+              {loading ? "Sending..." : "Send Message"}
             </button>
           </form>
         </motion.div>
