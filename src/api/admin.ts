@@ -2,7 +2,7 @@ import axios from "axios";
 import { Room } from "../types/room";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api/rooms",
+  baseURL: "http://localhost:8000/api/rooms",
 });
 
 // Get all rooms
