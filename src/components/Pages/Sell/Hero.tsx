@@ -1,17 +1,19 @@
+"use client";
+
 export default function Hero() {
   return (
-    <section className="bg-[#f5f6f8] py-16 md:py-20 overflow-hidden">
+    <section className="relative bg-gradient-to-b from-[#1a1a2e] to-[#252544] py-16 md:py-20 overflow-hidden">
       <div className="max-w-[1100px] mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16">
           {/* Left */}
           <div className="flex-1 min-w-0">
-            <p className="text-[11px] font-semibold tracking-[0.18em] uppercase text-[#6b6f7a] mb-5">
+            <p className="text-[11px] font-semibold tracking-[0.18em] uppercase text-gray-300 mb-5">
               Premier Listing Portal
             </p>
-            <h1 className="font-serif text-[clamp(32px,4.5vw,52px)] font-bold leading-[1.08] text-[#111118] mb-5">
+            <h1 className="font-serif text-[clamp(32px,4.5vw,52px)] font-bold leading-[1.08] text-white mb-5">
               Unlock the True Value<br />of Your Architecture.
             </h1>
-            <p className="text-[14px] text-[#6b6f7a] leading-[1.72] max-w-[380px]">
+            <p className="text-[14px] text-gray-300 leading-[1.72] max-w-[380px]">
               Transition from homeowner to seller with our bespoke concierge service.
               Provide the architectural details of your estate to receive an elite-market valuation.
             </p>
