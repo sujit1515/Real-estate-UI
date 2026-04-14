@@ -1,3 +1,4 @@
+// components/Contact/ContactInfo.tsx
 "use client";
 
 import React from "react";
@@ -33,7 +34,7 @@ const contactInfo = [
 
 export default function ContactInfo() {
   return (
-    <section className="py-12 xs:py-14 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-[#1a1a2e]">
+    <section className="py-12 xs:py-14 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-[#eeede9]">
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="text-center mb-8 xs:mb-10 sm:mb-12 md:mb-16"
@@ -42,8 +43,8 @@ export default function ContactInfo() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
-            Contact <span className="text-purple-500">Information</span>
+          <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
+            Contact <span className="text-purple-600">Information</span>
           </h2>
           <div className="w-16 xs:w-20 sm:w-24 h-1 bg-purple-600 mx-auto"></div>
         </motion.div>
@@ -54,18 +55,18 @@ export default function ContactInfo() {
             const content = info.link ? (
               <a
                 href={info.link}
-                className="text-gray-300 hover:text-purple-400 transition-colors"
+                className="text-gray-600 hover:text-purple-600 transition-colors"
               >
                 {info.content}
               </a>
             ) : (
-              <p className="text-gray-300">{info.content}</p>
+              <p className="text-gray-600">{info.content}</p>
             );
 
             return (
               <motion.div
                 key={index}
-                className="bg-[#252544] rounded-2xl sm:rounded-3xl p-6 xs:p-7 sm:p-8 text-center border border-purple-900/30 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2"
+                className="bg-white rounded-2xl sm:rounded-3xl p-6 xs:p-7 sm:p-8 text-center border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:-translate-y-2 shadow-sm hover:shadow-xl"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -74,10 +75,10 @@ export default function ContactInfo() {
                   delay: index * 0.1,
                 }}
               >
-                <div className="bg-purple-600/20 w-14 h-14 xs:w-16 xs:h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                  <Icon className="text-purple-400" size={28} />
+                <div className="bg-purple-50 w-14 h-14 xs:w-16 xs:h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 border border-purple-200">
+                  <Icon className="text-purple-600" size={28} />
                 </div>
-                <h3 className="text-lg xs:text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
+                <h3 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
                   {info.title}
                 </h3>
                 <div className="text-sm xs:text-base sm:text-lg leading-relaxed">

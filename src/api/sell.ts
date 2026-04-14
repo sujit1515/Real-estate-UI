@@ -1,100 +1,88 @@
 import axios from "axios";
 
-// Base API instance
+// ✅ Create Axios Instance
 const API = axios.create({
-  baseURL: "http://localhost:8000/api/sell/properties", 
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: "http://localhost:8000/api", // change in production
+  withCredentials: true,
 });
 
-// Attach token automatically (for admin routes)
-API.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+// =============================
+// 🏠 CREATE PROPERTY (SELL)
+// =============================
+export const addProperty = async (formData: FormData) => {
+  try {
+    const response = await API.post(
+      "/sell/properties/create",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    return response.data;
+  } catch (error: any) {
+    console.error("Add Property Error:", error);
+    throw error;
   }
-
-  return config;
-});
-
-
-// ================= ROOM / SELL API =================
-
-// ➤ Add Property (Admin)
-export const addRoom = async (data: {
-  title: string;
-  location: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  streetAddress: string;
-  squareFeet: number;
-  price: number;
-  isAvailable?: boolean;
-}) => {
-  const res = await API.post("/add", data);
-  return res.data;
 };
 
-// ➤ Get All Properties
-export const getRooms = async () => {
-  const res = await API.get("/");
-  return res.data;
-};
-
-
-// ➤ Get Single Property
-export const getRoomById = async (id: string) => {
-  const res = await API.get(`/${id}`);
-  return res.data;
-};
-
-
-// ➤ Update Property (Admin)
-export const updateRoom = async (
-  id: string,
-  data: {
-    title: string;
-    location: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    streetAddress: string;
-    squareFeet: number;
-    price: number;
-    isAvailable?: boolean;
+// =============================
+// 📦 GET ALL PROPERTIES
+// =============================
+export const getAllProperties = async () => {
+  try {
+    const res = await API.get("/properties");
+    return res.data;
+  } catch (error: any) {
+    throw error;
   }
-) => {
-  const res = await API.put(`/${id}`, data);
-  return res.data;
 };
 
-
-// ➤ Delete Property (Admin)
-export const deleteRoom = async (id: string) => {
-  const res = await API.delete(`/${id}`);
-  return res.data;
+// =============================
+// 🔍 GET SINGLE PROPERTY
+// =============================
+export const getPropertyById = async (id: string) => {
+  try {
+    const res = await API.get(`/properties/${id}`);
+    return res.data;
+  } catch (error: any) {
+    throw error;
+  }
 };
 
-
-// ➤ Get Available Properties (Client)
-export const getAvailableRooms = async () => {
-  const res = await API.get("/available");
-  return res.data;
+// =============================
+// ❌ DELETE PROPERTY
+// =============================
+export const deleteProperty = async (id: string) => {
+  try {
+    const res = await API.delete(`/properties/${id}`);
+    return res.data;
+  } catch (error: any) {
+    throw error;
+  }
 };
 
-
-// ➤ Update Availability (Admin)
-export const updateAvailability = async (
+// =============================
+// ✏️ UPDATE PROPERTY
+// =============================
+export const updateProperty = async (
   id: string,
-  isAvailable: boolean
+  formData: FormData
 ) => {
-  const res = await API.patch(`/${id}/availability`, {
-    isAvailable,
-  });
-  return res.data;
+  try {
+    const res = await API.put(
+      `/properties/${id}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return res.data;
+  } catch (error: any) {
+    throw error;
+  }
 };
-
-export default API;

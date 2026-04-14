@@ -1,3 +1,4 @@
+// components/Services/ServiceTestimonials.tsx
 "use client";
 
 import React from "react";
@@ -42,7 +43,7 @@ const testimonials = [
 
 export default function ServiceTestimonials() {
   return (
-    <section className="py-12 xs:py-14 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-[#1a1a2e]">
+    <section className="py-12 xs:py-14 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="text-center mb-8 xs:mb-10 sm:mb-12 md:mb-16"
@@ -51,10 +52,10 @@ export default function ServiceTestimonials() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
-            What Our <span className="text-purple-500">Clients Say</span>
+          <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
+            What Our <span className="text-purple-600">Clients Say</span>
           </h2>
-          <p className="text-gray-400 text-sm xs:text-base sm:text-lg md:text-xl max-w-3xl mx-auto px-2 sm:px-4">
+          <p className="text-gray-600 text-sm xs:text-base sm:text-lg md:text-xl max-w-3xl mx-auto px-2 sm:px-4">
             Real experiences from real people who trusted us with their property needs
           </p>
           <div className="w-16 xs:w-20 sm:w-24 h-1 bg-purple-600 mx-auto mt-4 sm:mt-6"></div>
@@ -64,7 +65,7 @@ export default function ServiceTestimonials() {
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={index}
-              className="bg-[#252544] rounded-2xl sm:rounded-3xl p-6 xs:p-7 sm:p-8 border border-purple-900/30 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 relative"
+              className="bg-white rounded-2xl sm:rounded-3xl p-6 xs:p-7 sm:p-8 border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl relative"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
@@ -73,12 +74,10 @@ export default function ServiceTestimonials() {
                 delay: index * 0.1,
               }}
             >
-              {/* Quote Icon */}
-              <div className="absolute top-6 right-6 opacity-20">
-                <Quote className="text-purple-400" size={40} />
+              <div className="absolute top-6 right-6 opacity-10">
+                <Quote className="text-purple-600" size={40} />
               </div>
 
-              {/* Stars */}
               <div className="flex gap-1 mb-4 sm:mb-5">
                 {[...Array(testimonial.rating)].map((_, i) => (
                   <Star
@@ -89,14 +88,12 @@ export default function ServiceTestimonials() {
                 ))}
               </div>
 
-              {/* Review */}
-              <p className="text-gray-300 text-sm xs:text-base leading-relaxed mb-5 sm:mb-6 relative z-10">
+              <p className="text-gray-700 text-sm xs:text-base leading-relaxed mb-5 sm:mb-6 relative z-10">
                 {testimonial.review}
               </p>
 
-              {/* Author */}
               <div className="flex items-center gap-3 sm:gap-4">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-purple-600/20 flex items-center justify-center overflow-hidden">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-purple-100 flex items-center justify-center overflow-hidden border border-purple-200">
                   <Image
                     src={testimonial.image}
                     alt={testimonial.name}
@@ -105,15 +102,15 @@ export default function ServiceTestimonials() {
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       e.currentTarget.style.display = "none";
-                      e.currentTarget.parentElement!.innerHTML = `<span class="text-purple-400 text-xl font-bold">${testimonial.name.charAt(0)}</span>`;
+                      e.currentTarget.parentElement!.innerHTML = `<span class="text-purple-600 text-xl font-bold">${testimonial.name.charAt(0)}</span>`;
                     }}
                   />
                 </div>
                 <div>
-                  <h4 className="text-white font-semibold text-sm xs:text-base">
+                  <h4 className="text-gray-900 font-semibold text-sm xs:text-base">
                     {testimonial.name}
                   </h4>
-                  <p className="text-gray-400 text-xs xs:text-sm">
+                  <p className="text-gray-500 text-xs xs:text-sm">
                     {testimonial.role}
                   </p>
                 </div>
@@ -122,7 +119,6 @@ export default function ServiceTestimonials() {
           ))}
         </div>
 
-        {/* Trust Indicators */}
         <motion.div
           className="mt-12 sm:mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8"
           initial={{ opacity: 0, y: 30 }}
@@ -131,34 +127,34 @@ export default function ServiceTestimonials() {
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <div className="text-center">
-            <div className="text-3xl xs:text-4xl sm:text-5xl font-bold text-purple-400 mb-2">
+            <div className="text-3xl xs:text-4xl sm:text-5xl font-bold text-purple-600 mb-2">
               1000+
             </div>
-            <div className="text-gray-400 text-sm xs:text-base">
+            <div className="text-gray-600 text-sm xs:text-base">
               Happy Clients
             </div>
           </div>
           <div className="text-center">
-            <div className="text-3xl xs:text-4xl sm:text-5xl font-bold text-purple-400 mb-2">
+            <div className="text-3xl xs:text-4xl sm:text-5xl font-bold text-purple-600 mb-2">
               500+
             </div>
-            <div className="text-gray-400 text-sm xs:text-base">
+            <div className="text-gray-600 text-sm xs:text-base">
               Properties Sold
             </div>
           </div>
           <div className="text-center">
-            <div className="text-3xl xs:text-4xl sm:text-5xl font-bold text-purple-400 mb-2">
+            <div className="text-3xl xs:text-4xl sm:text-5xl font-bold text-purple-600 mb-2">
               98%
             </div>
-            <div className="text-gray-400 text-sm xs:text-base">
+            <div className="text-gray-600 text-sm xs:text-base">
               Satisfaction Rate
             </div>
           </div>
           <div className="text-center">
-            <div className="text-3xl xs:text-4xl sm:text-5xl font-bold text-purple-400 mb-2">
+            <div className="text-3xl xs:text-4xl sm:text-5xl font-bold text-purple-600 mb-2">
               24/7
             </div>
-            <div className="text-gray-400 text-sm xs:text-base">Support</div>
+            <div className="text-gray-600 text-sm xs:text-base">Support</div>
           </div>
         </motion.div>
       </div>

@@ -1,3 +1,4 @@
+// components/About/MeetOurTeam.tsx
 "use client";
 
 import React from "react";
@@ -6,29 +7,29 @@ import Image from "next/image";
 
 const teamMembers = [
   {
-    name: "Jyotirmayee Panda",
-    position: "MERN stack Developer",
+    name: "Jyotrimayee Sahoo",
+    position: "MERN Stack Developer",
     description:
       "Expert in residential properties with 10+ years of experience in customer service.",
     image: "/Images/team-1.jpg",
   },
   {
-    name: "Satyabrata Rout",
-    position: "MERN stack Developer",
+    name: "Jyotrimayee Sahoo",
+    position: "MERN Stack Developer",
     description:
       "Specializes in commercial real estate and investment properties.",
     image: "/Images/team-2.jpg",
   },
   {
-    name: "Ashutosh Khuntia",
-    position: "MERN stack Developer",
+    name: "Jyotrimayee Sahoo",
+    position: "MERN Stack Developer",
     description:
       "Creates stunning interior designs that transform houses into homes.",
     image: "/Images/team-3.jpg",
   },
   {
-    name: "Suryakanta Das",
-    position: "MERN stack Developer",
+    name: "Jyotrimayee Sahoo",
+    position: "MERN Stack Developer",
     description:
       "Ensures all property transactions are legally compliant and secure.",
     image: "/Images/team-4.jpg",
@@ -37,7 +38,7 @@ const teamMembers = [
 
 export default function MeetOurTeam() {
   return (
-    <section className="py-12 xs:py-14 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-[#1a1a2e]">
+    <section className="py-12 xs:py-14 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="text-center mb-8 xs:mb-10 sm:mb-12 md:mb-16"
@@ -46,10 +47,10 @@ export default function MeetOurTeam() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
-            Meet Our <span className="text-purple-500">Team</span>
+          <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
+            Meet Our <span className="text-purple-600">Team</span>
           </h2>
-          <p className="text-gray-400 text-sm xs:text-base sm:text-lg md:text-xl max-w-3xl mx-auto px-2 sm:px-4">
+          <p className="text-gray-600 text-sm xs:text-base sm:text-lg md:text-xl max-w-3xl mx-auto px-2 sm:px-4">
             Dedicated professionals committed to helping you find your dream
             property
           </p>
@@ -60,7 +61,7 @@ export default function MeetOurTeam() {
           {teamMembers.map((member, index) => (
             <motion.div
               key={index}
-              className="bg-[#252544] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-purple-900/30 hover:border-purple-500/50"
+              className="bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-purple-300"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
@@ -71,7 +72,7 @@ export default function MeetOurTeam() {
             >
               {/* Team Member Image */}
               <div className="relative h-56 xs:h-60 sm:h-72 md:h-80 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-[#252544] via-transparent to-transparent z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10"></div>
                 <Image
                   src={member.image}
                   alt={member.name}
@@ -83,13 +84,13 @@ export default function MeetOurTeam() {
 
               {/* Team Member Info */}
               <div className="p-5 xs:p-6 sm:p-7">
-                <h3 className="text-lg xs:text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2">
+                <h3 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">
                   {member.name}
                 </h3>
-                <p className="text-purple-400 text-sm xs:text-base sm:text-lg font-medium mb-3 sm:mb-4">
+                <p className="text-purple-600 text-sm xs:text-base sm:text-lg font-medium mb-3 sm:mb-4">
                   {member.position}
                 </p>
-                <p className="text-gray-400 text-xs xs:text-sm sm:text-base leading-relaxed mb-4 sm:mb-5">
+                <p className="text-gray-500 text-xs xs:text-sm sm:text-base leading-relaxed mb-4 sm:mb-5">
                   {member.description}
                 </p>
 
@@ -97,11 +98,11 @@ export default function MeetOurTeam() {
                 <div className="flex gap-3 sm:gap-4">
                   <a
                     href="#"
-                    className="bg-purple-600/20 hover:bg-purple-600/40 p-2 sm:p-2.5 rounded-full transition-all hover:scale-110"
+                    className="bg-purple-50 hover:bg-purple-100 p-2 sm:p-2.5 rounded-full transition-all hover:scale-110 border border-purple-200"
                     aria-label="LinkedIn"
                   >
                     <svg
-                      className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400"
+                      className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >
@@ -110,11 +111,11 @@ export default function MeetOurTeam() {
                   </a>
                   <a
                     href="#"
-                    className="bg-purple-600/20 hover:bg-purple-600/40 p-2 sm:p-2.5 rounded-full transition-all hover:scale-110"
+                    className="bg-purple-50 hover:bg-purple-100 p-2 sm:p-2.5 rounded-full transition-all hover:scale-110 border border-purple-200"
                     aria-label="Instagram"
                   >
                     <svg
-                      className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400"
+                      className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >

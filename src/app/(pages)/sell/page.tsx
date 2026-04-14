@@ -1,29 +1,33 @@
+// app/sell/page.tsx
+"use client";
 
-import Hero from "@/components/Pages/Sell/Hero";
-import ListingSidebar from "@/components/Pages/Sell/ListingSidebar";
+import SellHeroSection from "@/components/Pages/Sell/HeroSection";
 import ListingForm from "@/components/Pages/Sell/ListingForm";
-
-
-export const metadata = {
-  title: "Estate Concierge — List Your Property",
-  description: "Unlock the true value of your architecture with our premier listing portal.",
-};
+import ListingProcessSidebar from "@/components/Pages/Sell/ListingProcessSidebar";
+import FreeValuationSection from "@/components/Pages/Sell/FreeValuationSection";
 
 export default function SellPage() {
   return (
-    <div className="bg-white min-h-screen">
-      {/* <Navbar /> */}
-      <Hero />
-
-      {/* Main content: sidebar + form */}
-      <div className="max-w-[1100px] mx-auto px-6 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-12 items-start">
-          <ListingSidebar />
-          <ListingForm />
+    <>
+      <SellHeroSection />
+      
+      <section className="w-full bg-[#eeede9] py-16 md:py-24 px-4 md:px-10 lg:px-16">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            {/* Left Column - Form */}
+            <div className="lg:col-span-2">
+              <ListingForm />
+            </div>
+            
+            {/* Right Column - Sidebar */}
+            <div className="lg:col-span-1">
+              <ListingProcessSidebar />
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* <Footer /> */}
-    </div>
+      </section>
+      
+      <FreeValuationSection />
+    </>
   );
 }

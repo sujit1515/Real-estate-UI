@@ -1,31 +1,18 @@
-
-import Hero from "@/components/Pages/Buy/Hero";
-import Architecturallcons from "@/components/Pages/Buy/Architecturallcons";
-import CoastalRetreats from "@/components/Pages/Buy/CoastalRetreats";
-import UrbanLofts from "@/components/Pages/Buy/UrbanLofts";
-import DesertSanctuaries from "@/components/Pages/Buy/DesertSanctuaries";
-import Newsletter from "@/components/Pages/Buy/Newsletter";
+ 
+import HeroSection from "@/components/Pages/Buy/Herosection";
+import CollectionSection from "@/components/Pages/Buy/CollectionSection";
+import ResidencesSection from "@/components/Pages/Buy/ResidencesSection";
+import EarlyAccessSection from "@/components/Pages/Buy/EarlyAccessSection";
 
 
-export const metadata = {
-  title: "Luxe Curator — Living as an Art Form",
-  description:
-    "Discover our meticulously gathered collections of properties that define the boundaries of modern living.",
-};
-
-export default function HomePage() {
+export default function Home() {
   return (
-    <div className="bg-[#f0f2f5] min-h-screen">
+    <main className="w-full">
+      <HeroSection />
+      <CollectionSection />
+      <ResidencesSection />
+      <EarlyAccessSection />
       
-      <main>
-        <Hero />
-        <Architecturallcons />
-        <CoastalRetreats />
-        <UrbanLofts />
-        <DesertSanctuaries />
-        <Newsletter />
-      </main>
-     
-    </div>
+    </main>
   );
 }

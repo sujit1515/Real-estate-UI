@@ -1,18 +1,22 @@
 import React from 'react';
-import Banner from '@/components/Home/Banner';
-import OurService from '@/components/Home/OurServices';
-import WhyChooseUs from '@/components/Home/WhyChooseUs';
-import OurAchievement from '@/components/Home/OurAchievement';
-import CTASection from '@/components/Pages/About/CTASection'
+import Banner from '@/components/Pages/Home/Banner';
+import CuratedCollections from '@/components/Pages/Home/Curatedcollections';
+import PhilosophySection from '@/components/Pages/Home/Philosophysection';
+import PropertySpotlight from '@/components/Pages/Home/Propertyspotlight';
+import PressTestimonial from '@/components/Pages/Home/Presstestimonial';
+import JournalSection from '@/components/Pages/Home/Journalsection';
+
 
 function page() {
   return (
     <div>
       <Banner/>
-      <OurService/>
-      <WhyChooseUs/>
-      <OurAchievement/> 
-      <CTASection/>
+      <CuratedCollections/>
+      <PhilosophySection/>
+      <PropertySpotlight/>
+      <PressTestimonial/>
+      <JournalSection/> 
+     
     </div>
   )
 }
