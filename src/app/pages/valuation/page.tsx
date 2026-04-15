@@ -1,12 +1,12 @@
 // app/valuation/page.tsx
 "use client";
 
-import ValuationHero from "@/components/Valuation/ValuationHero";
-import ValuationForm from "@/components/Valuation/ValuationForm";
-import ValuationMethods from "@/components/Valuation/ValuationMethods";
-import ValuationBenefits from "@/components/Valuation/ValuationBenefits";
-import ValuationFAQ from "@/components/Valuation/ValuationFAQ";
-import ValuationCTA from "@/components/Valuation/ValuationCTA";
+import ValuationHero from "@/components/Our-Services/Valuation/ValuationHero";
+import ValuationForm from "@/components/Our-Services/Valuation/ValuationForm";
+import ValuationMethods from "@/components/Our-Services/Valuation/ValuationMethods";
+import ValuationBenefits from "@/components/Our-Services/Valuation/ValuationBenefits";
+import ValuationFAQ from "@/components/Our-Services/Valuation/ValuationFAQ";
+import ValuationCTA from "@/components/Our-Services/Valuation/ValuationCTA";
 
 export default function ValuationPage() {
   return (

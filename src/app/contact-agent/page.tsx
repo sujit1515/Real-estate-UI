@@ -1,7 +1,7 @@
 // app/contact-agent/page.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { 
@@ -47,7 +47,8 @@ interface Agent {
   languages: string[];
 }
 
-export default function ContactAgentPage() {
+// Separate component that uses useSearchParams
+function ContactAgentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const propertyId = searchParams.get("propertyId");
@@ -467,5 +468,35 @@ export default function ContactAgentPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Loading fallback component
+function ContactAgentLoading() {
+  return (
+    <div className="relative min-h-screen">
+      <div
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=80')`,
+        }}
+      />
+      <div className="fixed inset-0 bg-black/60" />
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
+        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 text-center border border-white/20">
+          <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white text-lg">Loading contact information...</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function ContactAgentPage() {
+  return (
+    <Suspense fallback={<ContactAgentLoading />}>
+      <ContactAgentContent />
+    </Suspense>
   );
 }

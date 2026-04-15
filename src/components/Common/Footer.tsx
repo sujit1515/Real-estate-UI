@@ -226,10 +226,10 @@ const Footer = () => {
 
   // Services
   const services = [
-    { label: 'Property Valuation', href: '/valuation' },
-    { label: 'Interior Design', href: '/interior' },
-    { label: 'Renovation', href: '/renovation' },
-    { label: 'Legal Assistance', href: '/legal' },
+    { label: 'Property Valuation', href: '/pages/valuation' },
+    { label: 'Interior Design', href: '/pages/interior' },
+    { label: 'Renovation', href: '/pages/renovation' },
+    { label: 'Legal Assistance', href: '/pages/legal' },
   ];
 
   // Contact info

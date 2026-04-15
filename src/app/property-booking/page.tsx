@@ -1,7 +1,7 @@
 // app/property-booking/page.tsx
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
@@ -9,7 +9,8 @@ import PropertySummaryCard from "@/components/PropertyBooking/PropertySummaryCar
 import SellerDetailsCard from "@/components/PropertyBooking/SellerDetailsCard";
 import BookingForm from "@/components/PropertyBooking/BookingForm";
 
-export default function PropertyBookingPage() {
+// Separate component that uses useSearchParams
+function PropertyBookingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -94,5 +95,35 @@ export default function PropertyBookingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Loading fallback component
+function PropertyBookingLoading() {
+  return (
+    <div className="relative min-h-screen">
+      <div
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=80')`,
+        }}
+      />
+      <div className="fixed inset-0 bg-black/60" />
+      <div className="relative z-10 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-white">Loading booking details...</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function PropertyBookingPage() {
+  return (
+    <Suspense fallback={<PropertyBookingLoading />}>
+      <PropertyBookingContent />
+    </Suspense>
   );
 }

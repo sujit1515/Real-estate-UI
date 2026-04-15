@@ -1,7 +1,7 @@
 // app/payment-success/page.tsx
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { 
@@ -15,7 +15,8 @@ import {
   Printer
 } from "lucide-react";
 
-export default function PaymentSuccessPage() {
+// Separate component that uses useSearchParams
+function PaymentSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [countdown, setCountdown] = useState(5);
@@ -26,21 +27,21 @@ export default function PaymentSuccessPage() {
   const amount = searchParams.get("amount") || "1,240,000";
   const paymentMethod = searchParams.get("method") || "Credit Card";
 
-//   useEffect(() => {
-//     // Auto redirect to dashboard after 5 seconds
-//     const timer = setInterval(() => {
-//       setCountdown((prev) => {
-//         if (prev <= 1) {
-//           clearInterval(timer);
-//           router.push("/dashboard");
-//           return 0;
-//         }
-//         return prev - 1;
-//       });
-//     }, 1000);
+  // useEffect(() => {
+  //   // Auto redirect to dashboard after 5 seconds
+  //   const timer = setInterval(() => {
+  //     setCountdown((prev) => {
+  //       if (prev <= 1) {
+  //         clearInterval(timer);
+  //         router.push("/dashboard");
+  //         return 0;
+  //       }
+  //       return prev - 1;
+  //     });
+  //   }, 1000);
 
-//     return () => clearInterval(timer);
-//   }, [router]);
+  //   return () => clearInterval(timer);
+  // }, [router]);
 
   const handlePrint = () => {
     window.print();
@@ -285,5 +286,26 @@ export default function PaymentSuccessPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+// Loading fallback component
+function PaymentSuccessLoading() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-gray-600">Loading payment confirmation...</p>
+      </div>
+    </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense fallback={<PaymentSuccessLoading />}>
+      <PaymentSuccessContent />
+    </Suspense>
   );
 }

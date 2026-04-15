@@ -1,11 +1,13 @@
 // app/visit-confirmation/page.tsx
 "use client";
 
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Calendar, Clock, MapPin, User, Phone, Mail, CheckCircle, Home, ArrowRight } from "lucide-react";
 
-export default function VisitConfirmationPage() {
+// Separate component that uses useSearchParams
+function VisitConfirmationContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -105,5 +107,35 @@ export default function VisitConfirmationPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+// Loading fallback component
+function VisitConfirmationLoading() {
+  return (
+    <div className="relative min-h-screen">
+      <div
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=80')`,
+        }}
+      />
+      <div className="fixed inset-0 bg-black/60" />
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
+        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 text-center border border-white/20">
+          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-white text-lg">Loading visit confirmation...</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function VisitConfirmationPage() {
+  return (
+    <Suspense fallback={<VisitConfirmationLoading />}>
+      <VisitConfirmationContent />
+    </Suspense>
   );
 }
